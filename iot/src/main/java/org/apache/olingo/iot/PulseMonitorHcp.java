@@ -22,6 +22,9 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Element;
 
 public class PulseMonitorHcp {
 
@@ -79,10 +82,25 @@ public class PulseMonitorHcp {
 		if (xml.contains("entry") == false) {
 			throw new Exception();
 		} else {
+			
+			//NodeList nList1 = doc.getElementsByTagName("entry");
+			
+			//int test = nList1.getLength()-1;
+					
+			
 			getInfo(doc, xpath, "/feed/entry/content/properties/C_TIMESTAMP");
 			getInfo(doc, xpath, "/feed/entry/content/properties/C_SENSOR");
 			getInfo(doc, xpath, "/feed/entry/content/properties/C_VALUE");
 		}
+		
+           /* Node nNode = nList1.item(test);
+            Element eElement = (Element) nNode;
+
+            System.out.print("Test");
+            System.out.println(eElement.getTextContent());
+            
+            for*/
+            
 		
 	}
 	
