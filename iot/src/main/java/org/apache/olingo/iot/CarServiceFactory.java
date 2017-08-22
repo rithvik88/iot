@@ -30,16 +30,22 @@ public class CarServiceFactory extends ODataServiceFactory {
   @Override
   public ODataService createService(final ODataContext ctx) throws ODataException {
 
-    EdmProvider edmProvider = new CarEdmProvider();
+   // EdmProvider edmProvider = new CarEdmProvider();
 
-    ODataSingleProcessor singleProcessor = new CarODataSingleProcessor();
+    //ODataSingleProcessor singleProcessor = new CarODataSingleProcessor();
     
     PulseMonitorHcp pulseMonitor = new PulseMonitorHcp();
     pulseMonitor.fetchData();
     
     IOTTicket newTicket = new IOTTicket("test","https://qxl-cust220.dev.sapbydesign.com/sap/byd/odata/v1/c4c.svc/TicketCollection");
-    newTicket.loadMetadata();
+    try {
+		newTicket.loadMetadata();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     
-    return createODataSingleProcessorService(edmProvider, singleProcessor);
+    return null;
+    //return createODataSingleProcessorService(edmProvider, singleProcessor);
   }
 }

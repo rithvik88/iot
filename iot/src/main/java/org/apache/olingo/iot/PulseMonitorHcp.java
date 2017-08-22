@@ -1,11 +1,15 @@
 package org.apache.olingo.iot;
 
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
@@ -21,17 +25,20 @@ import org.w3c.dom.Document;
 
 public class PulseMonitorHcp {
 
-	public final static String URLPARAM = "https://iotmmsi309741trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/http/app.svc/NEO_7KDJ8U73KGZU6QF0UFC9THAJG.T_IOT_4F918F92154E7EF2A427";
+	public final String URLPARAM = "https://iotmmsi309741trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/http/app.svc/NEO_7KDJ8U73KGZU6QF0UFC9THAJG.T_IOT_4F918F92154E7EF2A427";
 	
-	public final static String URLPARAM_COUNT = "https://iotmmsi309741trial.hanatrial.ondemand.com:443/com.sap.iotservices.mms/v1/api/http/app.svc/count";
+	public final String URLPARAM_COUNT = "https://iotmmsi309741trial.hanatrial.ondemand.com:443/com.sap.iotservices.mms/v1/api/http/app.svc/count";
 	
-	public static String absoluteUrl;
-	public static String USER;
-	public static String PW;
+	public String absoluteUrl;
+	public String USER;
+	public String PW;
 	
-	public static String TIMESTAMP;
-	public static String SENSOR;
-	public static String VALUE;
+	public String TIMESTAMP;
+	public String SENSOR;
+	public String VALUE;
+	
+	public Map<String,String> sensorValues = new HashMap<String,String>();
+	ArrayList<String> sensor = new ArrayList<String>();
 	
 	public PulseMonitorHcp() {
 		
@@ -41,18 +48,21 @@ public class PulseMonitorHcp {
 		
 	}
 	
-	public static void fetchData() {
+	public ArrayList<String> fetchData() {
 		try {
 			BufferedReader in = buildConn();
 			parseData(in);
+			return sensor;
 		}  catch (IOException ie) {
 			ie.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 	
-	public static void parseData(BufferedReader in) throws Exception {
+	public void parseData(BufferedReader in) throws Exception {
 		StringBuffer response = new StringBuffer();
 		String line;
 		while ((line = in.readLine()) != null) {
@@ -69,21 +79,24 @@ public class PulseMonitorHcp {
 		if (xml.contains("entry") == false) {
 			throw new Exception();
 		} else {
-			getInfo(doc, xpath, "/feed/entry/content/properties/C_TIMESTAMP", TIMESTAMP);
-			getInfo(doc, xpath, "/feed/entry/content/properties/C_SENSOR", SENSOR);
-			getInfo(doc, xpath, "/feed/entry/content/properties/C_VALUE", VALUE);
+			getInfo(doc, xpath, "/feed/entry/content/properties/C_TIMESTAMP");
+			getInfo(doc, xpath, "/feed/entry/content/properties/C_SENSOR");
+			getInfo(doc, xpath, "/feed/entry/content/properties/C_VALUE");
 		}
-
+		
 	}
 	
-	public static void getInfo(Document doc, XPath xpath, String path, String key) throws XPathExpressionException
+	public String getInfo(Document doc, XPath xpath, String path) throws XPathExpressionException
 	 {
 		XPathExpression exp = xpath.compile(path);
 		String value = (String) exp.evaluate(doc, XPathConstants.STRING);
 		System.out.println(value);
+		sensor.add(value);
+		
+		return value;
 	}
 
-	public static BufferedReader buildConn() throws IOException {
+	public BufferedReader buildConn() throws IOException {
 		String code = "Basic " + new String(Base64.encodeBase64((USER + ":" + PW).getBytes()));
 		URL absU = new URL(absoluteUrl);
 		HttpsURLConnection con = (HttpsURLConnection) absU.openConnection();

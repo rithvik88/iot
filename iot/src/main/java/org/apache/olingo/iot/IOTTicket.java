@@ -1,18 +1,27 @@
 package org.apache.olingo.iot;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.EdmEntityContainer;
 import org.apache.olingo.odata2.api.ep.EntityProvider;
 import org.apache.olingo.odata2.api.exception.ODataApplicationException;
 import org.apache.olingo.odata2.api.exception.ODataException;
+import org.w3c.dom.Document;
 
 public class IOTTicket {
 
@@ -39,15 +48,15 @@ public class IOTTicket {
 	}
 
 
-	public boolean loadMetadata() throws ODataException {
+	public boolean loadMetadata() throws Exception {
 
 		InputStream content = null;
 		Edm edm;
 		try {
-			content = execute(this.uri + "/"+"$metadata","application/xml", "GET", "Basic YWRtaW5pc3RyYXRpb24wMTpXZWxjb21lMQ==");
+			content = execute(this.uri,"application/xml", "GET", "Basic YWRtaW5pc3RyYXRpb24wMTpXZWxjb21lMQ==");
 			
-			edm = EntityProvider.readMetadata(content, false);
-			this.entityContainer = edm.getDefaultEntityContainer();
+			parseData(new BufferedReader(new InputStreamReader(content)));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -55,6 +64,21 @@ public class IOTTicket {
 
 		return true;
 	}
+	
+	
+	public static void parseData(BufferedReader in) throws Exception {
+		StringBuffer response = new StringBuffer();
+		String line;
+		while ((line = in.readLine()) != null) {
+			response.append(line);
+		}
+
+		String xml = response.toString();
+		System.out.println(xml);
+
+	}
+
+	
 	
 	public static InputStream execute(String relativeUri, String contentType,
 			String httpMethod, String httpHeaderMap) throws IOException, ODataException {

@@ -18,14 +18,15 @@
          under the License.
 -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-  id="WebApp_ID" version="2.5">
+   xmlns="http://java.sun.com/xml/ns/javaee" 
+   xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   id="WebApp_ID" version="2.5">
   <display-name>org.apache.olingo.odata2.sample</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-
   <servlet>
     <servlet-name>CarServiceServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
@@ -39,8 +40,18 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  <servlet-mapping>
+  <!--  <servlet-mapping>
     <servlet-name>CarServiceServlet</servlet-name>
     <url-pattern>/CarService.svc/*</url-pattern>
+  </servlet-mapping> -->
+  <servlet>
+    <description></description>
+    <display-name>IotServlet</display-name>
+    <servlet-name>IotServlet</servlet-name>
+    <servlet-class>org.apache.olingo.iot.IotServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IotServlet</servlet-name>
+    <url-pattern>/IotServlet</url-pattern>
   </servlet-mapping>
 </web-app>
