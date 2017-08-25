@@ -48,21 +48,21 @@ public class IOTTicket {
 	}
 
 
-	public boolean loadMetadata() throws Exception {
+	public String loadMetadata() throws Exception {
 
-		InputStream content = null;
+		String token = null;
 		Edm edm;
 		try {
-			content = execute(this.uri,"application/xml", "GET", "Basic YWRtaW5pc3RyYXRpb24wMTpXZWxjb21lMQ==");
+			token = execute(this.uri,"application/xml", "GET", "Basic YWRtaW5pc3RyYXRpb24wMTpXZWxjb21lMQ==");
 			
-			parseData(new BufferedReader(new InputStreamReader(content)));
+			//parseData(new BufferedReader(new InputStreamReader(content)));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
-		return true;
+		return token;
 	}
 	
 	
@@ -80,7 +80,7 @@ public class IOTTicket {
 
 	
 	
-	public static InputStream execute(String relativeUri, String contentType,
+	public static String execute(String relativeUri, String contentType,
 			String httpMethod, String httpHeaderMap) throws IOException, ODataException {
 		
 		//initialize the connection
@@ -89,11 +89,11 @@ public class IOTTicket {
 		//connect
 		connection.connect();
 
-		InputStream content = null;
-		content = extractResponseFromURLConnection(connection);
+		String csrf = null;
+		csrf = extractResponseFromURLConnection(connection);
 
 		//return the proper InputStream for the URI
-		return content;
+		return csrf;
 	}	
 	
 	public static HttpURLConnection initializeConnection(String absolutUri,
@@ -106,11 +106,12 @@ public class IOTTicket {
 		connection.setRequestMethod(httpMethod);
 		connection.setRequestProperty("Authorization", httpHeaderMap);
 		connection.setRequestProperty("Content-Type", contentType);
+		connection.setRequestProperty("X-CSRF-Token", "Fetch");
 
 		return connection;
 	}
 	
-	public static InputStream extractResponseFromURLConnection( HttpURLConnection connection ) 
+	public static String extractResponseFromURLConnection( HttpURLConnection connection ) 
 			 throws IOException, ODataApplicationException {
 		 
 		InputStream responseContent = null;
@@ -135,7 +136,7 @@ public class IOTTicket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		 
-		return responseContent;
+		return connection.getHeaderField("x-csrf-token");
 	
 	}	
 	
