@@ -5,17 +5,39 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProxySelector;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.cxf.helpers.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import org.apache.olingo.odata2.api.edm.Edm;
 import org.apache.olingo.odata2.api.edm.EdmEntityContainer;
 import org.apache.olingo.odata2.api.ep.EntityProvider;
@@ -53,13 +75,16 @@ public class IOTTicket {
 		String token = null;
 		Edm edm;
 		try {
-			token = execute(this.uri,"application/xml", "GET", "Basic YWRtaW5pc3RyYXRpb24wMTpXZWxjb21lMQ==");
+			token = execute(this.uri,"text/xml", "GET", "Basic cml0aHZpazp3ZWxjb21lMTIz");
 			
 			//parseData(new BufferedReader(new InputStreamReader(content)));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return token;
@@ -80,28 +105,69 @@ public class IOTTicket {
 
 	
 	
+	@SuppressWarnings("deprecation")
 	public static String execute(String relativeUri, String contentType,
-			String httpMethod, String httpHeaderMap) throws IOException, ODataException {
+			String httpMethod, String httpHeaderMap) throws Throwable {
+		
+		CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) );
 		
 		//initialize the connection
-		HttpURLConnection connection = initializeConnection(relativeUri, contentType, httpMethod,httpHeaderMap);
+		HttpsURLConnection connection = initializeConnection(relativeUri, contentType, httpMethod,httpHeaderMap);
+		
+		
+		//HttpClient client = new DefaultHttpClient();
+		
+		//DefaultHttpClient client = new DefaultHttpClient();
+		//client.getCredentialsProvider().setCredentials(new AuthScope(proxyHost, proxyPort),new UsernamePasswordCredentials("i309741", "welcome!123"));
+		
+		//client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost("proxy.wdf.sap.corp", 8080));
+		
+		//HttpGet get = initializeConnection(relativeUri, contentType, httpMethod,httpHeaderMap);
 		
 		//connect
-		connection.connect();
+		//connection.connect();
+		//HttpResponse response = client.execute(get);
+		//String csrf = null;
+		//csrf = extractResponseFromURLConnection(connection);
+		
+		/*
+		String m_csrfToken;
+		m_csrfToken = response.getFirstHeader("X-CSRF-Token").getValue();
+		
+		Header[] header = response.getAllHeaders();
+		
+		for(Header test:header){
+			
+			System.out.println(test.getName()+":"+test.getValue());
+			
+		}*/
+		
+		
+		 String xsrfToken = null;
+		    try{
 
-		String csrf = null;
-		csrf = extractResponseFromURLConnection(connection);
+		        InputStream stream = connection.getInputStream();
+		        IOUtils.toString(stream);
+		        xsrfToken = connection.getHeaderFields().get("X-CSRF-Token").get(0);
+		    } catch(Throwable t){
+		        InputStream errorDetails = connection.getErrorStream();
+		        if(errorDetails != null)
+		            System.out.println("Server error response is: {}"+ IOUtils.toString(errorDetails));
+		        throw t;
+		    } 
+				
+		System.out.println(xsrfToken);
 
 		//return the proper InputStream for the URI
-		return csrf;
+		return xsrfToken;
 	}	
 	
-	public static HttpURLConnection initializeConnection(String absolutUri,
+	public static HttpsURLConnection initializeConnection(String absolutUri,
 			String contentType, String httpMethod, String httpHeaderMap)
 			throws MalformedURLException, IOException {
 		
 		URL url = new URL(absolutUri);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
 		connection.setRequestMethod(httpMethod);
 		connection.setRequestProperty("Authorization", httpHeaderMap);
@@ -109,6 +175,17 @@ public class IOTTicket {
 		connection.setRequestProperty("X-CSRF-Token", "Fetch");
 
 		return connection;
+
+		
+		/*
+		HttpGet get = new HttpGet(absolutUri);
+		
+		get.setHeader("Authorization", httpHeaderMap);
+		get.setHeader("Content-Type", contentType);
+		get.setHeader("X-CSRF-Token", "Fetch");
+		
+		return get;*/
+		
 	}
 	
 	public static String extractResponseFromURLConnection( HttpURLConnection connection ) 
@@ -140,5 +217,4 @@ public class IOTTicket {
 	
 	}	
 	
-
 }

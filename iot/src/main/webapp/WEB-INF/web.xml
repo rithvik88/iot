@@ -27,6 +27,21 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+  
+  <listener>
+		<listener-class>org.apache.olingo.iot.ServletContext</listener-class>
+	</listener>
+	
+	<resource-ref>
+		<res-ref-name>IOTOutbound</res-ref-name>
+		<res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
+	</resource-ref>
+	<resource-ref>
+		<res-ref-name>connectivityConfiguration</res-ref-name>
+		<res-type>com.sap.core.connectivity.api.configuration.ConnectivityConfiguration</res-type>
+	</resource-ref>
+  
+  
   <servlet>
     <servlet-name>CarServiceServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>

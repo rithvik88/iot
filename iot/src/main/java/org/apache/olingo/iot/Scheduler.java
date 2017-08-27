@@ -9,8 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Scheduler {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	Scheduler() {
 		ScheduledThreadPoolExecutor poolExecutor = null;  
 		
 		if(poolExecutor==null){
@@ -26,12 +25,15 @@ public class Scheduler {
 			poolExecutor.scheduleAtFixedRate(new Runnable(){
 		    	public void run(){
 			    	try {
-			    			PulseMonitorHcp pulseMonitor = new PulseMonitorHcp();
+			    			/*PulseMonitorHcp pulseMonitor = new PulseMonitorHcp();
 			    			ArrayList<String> sensorValue = pulseMonitor.fetchData();
 			    			
 			    			System.out.println(sensorValue.get(0));
 			    			System.out.println(sensorValue.get(1));
-			    			System.out.println(sensorValue.get(2));
+			    			System.out.println(sensorValue.get(2));*/
+			    		
+			    			PulseMonitorHcp pulseMonitor = new PulseMonitorHcp();
+			    			pulseMonitor.Count();
 			    			
 					} catch (Throwable e) {
 						//logger.error("Tenant Update Service could not run.");

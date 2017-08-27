@@ -52,7 +52,7 @@ public class IOTC4CTicket {
 		InputStream content = null;
 		Edm edm;
 		try {
-			content = execute(this.uri,"application/atom+xml", "POST", "Basic YWRtaW5pc3RyYXRpb24wMTpXZWxjb21lMQ==", token);
+			content = execute(this.uri,"application/atom+xml", "POST", "Basic cml0aHZpazp3ZWxjb21lMTIz", token);
 			
 			//parseData(new BufferedReader(new InputStreamReader(content)));
 			
