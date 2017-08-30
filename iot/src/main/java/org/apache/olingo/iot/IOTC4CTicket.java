@@ -52,7 +52,7 @@ public class IOTC4CTicket {
 		InputStream content = null;
 		Edm edm;
 		try {
-			content = execute(this.uri,"application/atom+xml", "POST", "Basic cml0aHZpazp3ZWxjb21lMTIz", token);
+			content = execute(this.uri,"application/atom+xml", "POST", "Basic XXXXXXX", token);
 			
 			//parseData(new BufferedReader(new InputStreamReader(content)));
 			
@@ -121,7 +121,7 @@ public class IOTC4CTicket {
 	public static String xmlCreate(){
 		
 		String ticket_create = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r"
-				+ "<atom:entry xmlns:atom=\"http://www.w3.org/2005/Atom\"\rxmlns:m=\"http://schemas.microsoft.com/ado/2007/08/dataservices/metadata\" xmlns:d=\"http://schemas.microsoft.com/ado/2007/08/dataservices\" xml:base=\"https://qxl-cust220.dev.sapbydesign.com/sap/byd/odata/v1/c4c.svc/\">\r"
+				+ "<atom:entry xmlns:atom=\"http://www.w3.org/2005/Atom\"\rxmlns:m=\"http://schemas.microsoft.com/ado/2007/08/dataservices/metadata\" xmlns:d=\"http://schemas.microsoft.com/ado/2007/08/dataservices\" xml:base=\"https://XXXXXXX.dev.sapbydesign.com/sap/byd/odata/v1/c4c.svc/\">\r"
 				+ "<atom:category term=\"C4C.SVC.Ticket\" scheme=\"http://schemas.microsoft.com/ado/2007/08/dataservices/scheme\"/>\r"
 				+ "<atom:content type=\"application/xml\"> \r\t"
 				+ "<m:properties>\r\t\t"

@@ -75,7 +75,7 @@ public class IOTTicket {
 		String token = null;
 		Edm edm;
 		try {
-			token = execute(this.uri,"text/xml", "GET", "Basic cml0aHZpazp3ZWxjb21lMTIz");
+			token = execute(this.uri,"text/xml", "GET", "Basic XXXXXXX");
 			
 			//parseData(new BufferedReader(new InputStreamReader(content)));
 			
@@ -113,35 +113,7 @@ public class IOTTicket {
 		
 		//initialize the connection
 		HttpsURLConnection connection = initializeConnection(relativeUri, contentType, httpMethod,httpHeaderMap);
-		
-		
-		//HttpClient client = new DefaultHttpClient();
-		
-		//DefaultHttpClient client = new DefaultHttpClient();
-		//client.getCredentialsProvider().setCredentials(new AuthScope(proxyHost, proxyPort),new UsernamePasswordCredentials("i309741", "welcome!123"));
-		
-		//client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost("proxy.wdf.sap.corp", 8080));
-		
-		//HttpGet get = initializeConnection(relativeUri, contentType, httpMethod,httpHeaderMap);
-		
-		//connect
-		//connection.connect();
-		//HttpResponse response = client.execute(get);
-		//String csrf = null;
-		//csrf = extractResponseFromURLConnection(connection);
-		
-		/*
-		String m_csrfToken;
-		m_csrfToken = response.getFirstHeader("X-CSRF-Token").getValue();
-		
-		Header[] header = response.getAllHeaders();
-		
-		for(Header test:header){
-			
-			System.out.println(test.getName()+":"+test.getValue());
-			
-		}*/
-		
+				
 		
 		 String xsrfToken = null;
 		    try{

@@ -30,9 +30,9 @@ import org.w3c.dom.Element;
 
 public class PulseMonitorHcp {
 
-	public final String URLPARAM = "https://iotmmsi309741trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/http/app.svc/NEO_7KDJ8U73KGZU6QF0UFC9THAJG.T_IOT_4F918F92154E7EF2A427";
+	public final String URLPARAM = "https://iotmmsXXXXXXXtrial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/http/app.svc/NEO_7KDJ8U73KGZU6QF0UFC9THAJG.T_IOT_4F918F92154E7EF2A427";
 	
-	public final String URLPARAM_COUNT = "https://iotmmsi309741trial.hanatrial.ondemand.com:443/com.sap.iotservices.mms/v1/api/http/app.svc/count";
+	public final String URLPARAM_COUNT = "https://iotmmsXXXXXXXtrial.hanatrial.ondemand.com:443/com.sap.iotservices.mms/v1/api/http/app.svc/count";
 	
 	public String absoluteUrl;
 	public String countUrl;
@@ -52,8 +52,8 @@ public class PulseMonitorHcp {
 	
 	public PulseMonitorHcp() {
 		
-		USER = "i309741";
-		PW = "welcome!123";
+		USER = "XXXXXXX";
+		PW = "XXXXXXX";
 		absoluteUrl = URLPARAM;
 		countUrl = URLPARAM_COUNT;
 		

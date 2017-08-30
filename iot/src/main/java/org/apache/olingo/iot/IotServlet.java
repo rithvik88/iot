@@ -44,12 +44,6 @@ public class IotServlet extends HttpServlet {
 		response.getWriter().println("<p>Value : "+sensorValue.get(2)+"</p>");*/
 		
 		/*
-		CookieHandler.setDefault( new CookieManager( null, CookiePolicy.ACCEPT_ALL ) );
-		CloudTicket cloud = new CloudTicket();
-		List<String> token = cloud.getxcsrf();
-		String content = cloud.startInstance(token);*/
-		
-		/*
 		PulseMonitorHcp pulseMonitor = new PulseMonitorHcp();
 		pulseMonitor.ticketCreate();*/
 		

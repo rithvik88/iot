@@ -26,7 +26,7 @@ public class ServletContext implements ServletContextListener{
 
 	static Logger logger = LoggerFactory.getLogger(ServletContext.class);
 	private static String URL;
-	public static SSLSocketFactory sslSocketFactory;
+	//public static SSLSocketFactory sslSocketFactory;
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -70,11 +70,13 @@ public class ServletContext implements ServletContextListener{
 			logger.error("Error during ssl setup (trustManager)");
 			return;
 		}
+		
+		System.setProperty("https.protocols","TLSv1.1,TLSv1.2");
 
 		SSLContext sslcontext = null;
-		//SSLSocketFactory sslSocketFactory = null;
+		SSLSocketFactory sslSocketFactory = null;
 		try {
-			sslcontext = SSLContext.getInstance("TLSv1.2");
+			sslcontext = SSLContext.getInstance("TLS");
 			sslcontext.init(null, trustManagerFactory.getTrustManagers(), null);
 			sslSocketFactory = sslcontext.getSocketFactory();
 		} catch (NoSuchAlgorithmException e){}
@@ -83,7 +85,7 @@ public class ServletContext implements ServletContextListener{
 		}
 
 		HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
-		setSslSocketFactory(sslSocketFactory);
+		//setSslSocketFactory(sslSocketFactory);
 	}
 	
 	public static String getURL() {
@@ -94,13 +96,4 @@ public class ServletContext implements ServletContextListener{
 		URL = uRL;
 	}
 	
-	public static SSLSocketFactory getSslSocketFactory() {
-		return sslSocketFactory;
-	}
-
-	public static void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
-		ServletContext.sslSocketFactory = sslSocketFactory;
-	}
-	
-
 }

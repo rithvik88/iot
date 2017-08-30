@@ -37,13 +37,7 @@ public class CarServiceFactory extends ODataServiceFactory {
     PulseMonitorHcp pulseMonitor = new PulseMonitorHcp();
     pulseMonitor.fetchData();
     
-    IOTTicket newTicket = new IOTTicket("test","https://qxl-cust220.dev.sapbydesign.com/sap/byd/odata/v1/c4c.svc/TicketCollection");
-    try {
-		newTicket.loadMetadata();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+    
     
     return null;
     //return createODataSingleProcessorService(edmProvider, singleProcessor);
